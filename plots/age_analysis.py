@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 def render_age_chart(df_age, selected_ages):
-    """Generates a demographic line chart mapped to Revolut Tier colorways."""
+    """Generates a line chart tracking consumer spending indices by age demographic."""
     fig, ax = plt.subplots(figsize=(10, 5))
     
     fig.patch.set_facecolor('#0f121d')
@@ -11,18 +11,17 @@ def render_age_chart(df_age, selected_ages):
     ax.yaxis.label.set_color('#848e9c')
     ax.grid(True, color='#222838', linestyle='-', linewidth=0.8)
     
-    # Revolut Product Brand Architecture Colors
-    tier_colors = {
-        "18-34": "#00d4ff",  # Revolut Standard Electric Blue
-        "35-54": "#ff007f",  # Revolut Premium Pink
-        "55+": "#7b2cbf"     # Revolut Ultra Obsidian Purple
+    age_colors = {
+        "18-34": "#00d4ff",  
+        "35-54": "#ff007f",  
+        "55+": "#7b2cbf"     
     }
     
     for age in selected_ages:
         if age in df_age.columns:
-            ax.plot(df_age['Date'], df_age[age], label=f"Age {age}", color=tier_colors.get(age, '#ffffff'), linewidth=1.8)
+            ax.plot(df_age['Date'], df_age[age], label=f"Age {age}", color=age_colors.get(age, '#ffffff'), linewidth=1.8)
         
-    ax.set_ylabel("Index Score (Base 100 = 2023 Average)", fontsize=10, fontweight='bold', color='#848e9c')
+    ax.set_ylabel("Spending Index (Base 100 = 2023 Average)", fontsize=10, color='#848e9c')
     ax.legend(frameon=True, facecolor='#0f121d', edgecolor='none', labelcolor='white', loc='upper left', fontsize=9)
     
     for spine in ax.spines.values():
