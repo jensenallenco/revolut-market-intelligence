@@ -29,3 +29,23 @@ def render_age_chart(df_age, selected_ages):
         
     plt.tight_layout()
     return fig
+
+
+def get_age_insights(df_age, selected_ages):
+    """Generates direct text observations based on the active age filters."""
+    if not selected_ages:
+        return "No demographic cohorts selected for statistical evaluation."
+        
+    df_sorted = df_age.sort_values('Date')
+    latest_entries = df_sorted.iloc[-1]
+    
+    # Filter latest entries to only include currently checked age groups
+    active_scores = {age: latest_entries[age] for age in selected_ages if age in latest_entries}
+    
+    if not active_scores:
+        return "Insufficient data for active cohorts."
+        
+    leading_age = max(active_scores, key=active_scores.get)
+    leading_val = active_scores[leading_age]
+    
+    return f"Within the filtered cohorts, the **Age {leading_age}** group shows the highest spending index velocity at the current terminal period, marking an aggregate index score of **{leading_val:.1f}**."
