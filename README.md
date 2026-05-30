@@ -2,7 +2,7 @@
 
 A production-grade, modular analytics dashboard built with Python and Streamlit to visualize and analyze official UK macroeconomic transaction indicators. This application processes real-time transaction velocity indices to extract consumer behavioral shifts and platform demographic trajectories.
 
-🔗 **Live Interactive Dashboard:** [Insert Your Live Streamlit URL Here]
+🔗 **Live Interactive Dashboard:** https://revolut-market-intelligence.streamlit.app/
 
 ---
 
