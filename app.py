@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-from plots.sector_analysis import render_sector_chart
-from plots.age_analysis import render_age_chart
+# Dynamic modular imports
+from plots.sector_analysis import render_sector_chart, get_sector_insights
+from plots.age_analysis import render_age_chart, get_age_insights
 from plots.kpi_metrics import calculate_top_metrics
 
 st.set_page_config(page_title="Revolut Debit Card Spending Indicators — UK", layout="wide")
@@ -19,6 +20,7 @@ st.markdown("""
 
 @st.cache_data
 def load_and_preprocess_data():
+    # Read core tables directly skipping ONS metadata sheets
     df_sec = pd.read_excel("revolut_dataset_may2026.xlsx", sheet_name="1.Spending by Sector NSA", skiprows=4)
     df_a = pd.read_excel("revolut_dataset_may2026.xlsx", sheet_name="2.Spending by Age NSA", skiprows=4)
     
@@ -49,7 +51,7 @@ with kpi_col3:
 
 st.markdown("---")
 
-# --- CHARTS SECTION: SPENDING TRENDS OVER TIME ---
+# --- CHARTS & INSIGHTS SECTION: SPENDING TRENDS OVER TIME ---
 st.markdown("### Spending Trends Over Time")
 left_col, right_col = st.columns(2)
 
@@ -60,6 +62,11 @@ with left_col:
     
     fig_sector = render_sector_chart(df_sector, selected_sectors)
     st.pyplot(fig_sector)
+    
+    # Context-aware statistical text summary card
+    with st.container(border=True):
+        st.markdown("**Statistical Summary (Category Selection)**")
+        st.write(get_sector_insights(df_sector, selected_sectors))
 
 with right_col:
     st.markdown("#### Spending by Age Group")
@@ -68,6 +75,11 @@ with right_col:
     
     fig_age = render_age_chart(df_age, selected_ages)
     st.pyplot(fig_age)
+    
+    # Context-aware statistical text summary card
+    with st.container(border=True):
+        st.markdown("**Statistical Summary (Demographic Selection)**")
+        st.write(get_age_insights(df_age, selected_ages))
 
 st.markdown("---")
 st.caption("Source: Revolut debit card transaction data, published by the ONS Real Time Indicators team. Official statistics in development.")
