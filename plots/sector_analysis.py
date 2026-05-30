@@ -29,24 +29,17 @@ def render_sector_chart(df_sector, selected_sectors):
     return fig
 
 def get_sector_insights(df_sector, selected_sectors):
-    """Generates direct text observations based on the active sector filters."""
+    """Generates a direct, clean observation of category trends using standard statistical terms."""
     if not selected_sectors:
         return "No categories selected for statistical evaluation."
         
-    df_recent = df_sector.sort_values('Date').tail(365) # Look at the trailing year
-    insights = []
+    df_recent = df_sector.sort_values('Date').tail(365) # Trailing 12 months
     
-    for sector in selected_sectors:
-        latest_val = df_recent[sector].iloc[-1]
-        min_val = df_recent[sector].min()
-        max_val = df_recent[sector].max()
-        
-        # Calculate volatility (Spread between max and min index points)
-        volatility = max_val - min_val
-        
-        if volatility > 40:
-            status = "high seasonal volatility"
-        else:
-            status = "stable baseline consumer demand"
+    # Calculate the max-min range of the index over the past year
+    recent_maxs = df_recent[selected_sectors].max()
+    recent_mins = df_recent[selected_sectors].min()
+    max_range = (recent_maxs - recent_mins).max()
+    
+    movement_type = "notable seasonal movement" if max_range > 40 else "stable baseline movement"
             
-    return f"The selected categories track a variance span of {volatility:.1f} index points over the trailing 12 months, indicating a pattern of {status} across the UK market grid."
+    return f"The selected categories show a {max_range:.1f}-point range in the spending index over the past 12 months, suggesting {movement_type} in UK debit card spending."
