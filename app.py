@@ -20,7 +20,6 @@ st.markdown("""
 
 @st.cache_data
 def load_and_preprocess_data():
-    # Read core tables directly skipping ONS metadata sheets
     df_sec = pd.read_excel("revolut_dataset_may2026.xlsx", sheet_name="1.Spending by Sector NSA", skiprows=4)
     df_a = pd.read_excel("revolut_dataset_may2026.xlsx", sheet_name="2.Spending by Age NSA", skiprows=4)
     
@@ -63,9 +62,9 @@ with left_col:
     fig_sector = render_sector_chart(df_sector, selected_sectors)
     st.pyplot(fig_sector)
     
-    # Context-aware statistical text summary card
+    # Dataset-faithful Category Observation Card
     with st.container(border=True):
-        st.markdown("**Statistical Summary (Category Selection)**")
+        st.markdown("**Statistical Summary — Category Selection**")
         st.write(get_sector_insights(df_sector, selected_sectors))
 
 with right_col:
@@ -76,9 +75,9 @@ with right_col:
     fig_age = render_age_chart(df_age, selected_ages)
     st.pyplot(fig_age)
     
-    # Context-aware statistical text summary card
+    # Dataset-faithful Age Demographic Observation Card
     with st.container(border=True):
-        st.markdown("**Statistical Summary (Demographic Selection)**")
+        st.markdown("**Statistical Summary — Age Group Selection**")
         st.write(get_age_insights(df_age, selected_ages))
 
 st.markdown("---")
