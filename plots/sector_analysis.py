@@ -27,3 +27,26 @@ def render_sector_chart(df_sector, selected_sectors):
         
     plt.tight_layout()
     return fig
+
+def get_sector_insights(df_sector, selected_sectors):
+    """Generates direct text observations based on the active sector filters."""
+    if not selected_sectors:
+        return "No categories selected for statistical evaluation."
+        
+    df_recent = df_sector.sort_values('Date').tail(365) # Look at the trailing year
+    insights = []
+    
+    for sector in selected_sectors:
+        latest_val = df_recent[sector].iloc[-1]
+        min_val = df_recent[sector].min()
+        max_val = df_recent[sector].max()
+        
+        # Calculate volatility (Spread between max and min index points)
+        volatility = max_val - min_val
+        
+        if volatility > 40:
+            status = "high seasonal volatility"
+        else:
+            status = "stable baseline consumer demand"
+            
+    return f"The selected categories track a variance span of {volatility:.1f} index points over the trailing 12 months, indicating a pattern of {status} across the UK market grid."
